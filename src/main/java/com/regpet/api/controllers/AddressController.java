@@ -72,10 +72,14 @@ public class AddressController {
     @Path("/{id}")
     public Response updateAddressData(@PathParam("id") UUID id, Address address) {
         try {
+            RequestUtils.validateRequestBody(address, validator);
             return Response.status(Response.Status.OK).entity(
                     addressService.update(id, address)).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getError()).build();
+        } catch (MissingFieldException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(
+                    new MissingFieldsMessageDTO(e.getMessage(), (List<InvalidFieldDTO>) e.getErrors())).build();
         }
     }
 
