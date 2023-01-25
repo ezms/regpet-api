@@ -13,5 +13,5 @@ public class UserResponseDTO {
     private String username;
     private String email;
     private String bio;
-    private String profilePhoto;
+    private byte[] profilePhoto;
 }

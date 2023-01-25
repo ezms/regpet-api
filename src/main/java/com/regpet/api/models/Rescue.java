@@ -30,8 +30,5 @@ public class Rescue {
     private User user;
 
     @ManyToMany(mappedBy = "rescues", fetch = FetchType.LAZY)
-    private List<Address> addresses;
-
-    @ManyToMany(mappedBy = "rescues", fetch = FetchType.EAGER)
     private List<Animal> animals;
 }

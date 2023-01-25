@@ -1,10 +1,14 @@
 package com.regpet.api.models;
 
-import com.regpet.api.interfaces.IEntityDefaults;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +16,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "addresses", schema = "public")
-public class Address implements IEntityDefaults<UUID> {
+public class Address implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "address_id")
@@ -40,17 +44,31 @@ public class Address implements IEntityDefaults<UUID> {
     @Column(name = "complement", length = 100)
     private String complement;
 
+    @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "users_addresses",
-            joinColumns = @JoinColumn(name = "address_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id")
+    @JoinTable(name = "users_addresses"
+            , joinColumns = @JoinColumn(name = "address_id")
+            , inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    private List<User> users;
+    private List<User> users = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "addresses_rescues",
-            joinColumns = @JoinColumn(name = "address_id"),
-            inverseJoinColumns = @JoinColumn(name = "rescue_id")
+    @JoinTable(name = "addresses_rescues"
+            , joinColumns = @JoinColumn(name = "address_id")
+            , inverseJoinColumns = @JoinColumn(name = "rescue_id")
     )
     private List<Rescue> rescues;
+
+    public void addUser(User user) {
+        if (user != null) {
+            if (!getUsers().contains(user)) {
+                getUsers().add(user);
+            }
+
+            if (!user.getAddresses().contains(this)) {
+                user.getAddresses().add(this);
+            }
+        }
+    }
 }

@@ -2,7 +2,7 @@ package com.regpet.api.models;
 
 import com.regpet.api.enums.Gender;
 import com.regpet.api.enums.Status;
-import com.regpet.api.interfaces.IEntityDefaults;
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,7 +15,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "animals", schema = "public")
-public class Animal implements IEntityDefaults<UUID> {
+public class Animal implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "animal_id")

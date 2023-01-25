@@ -6,6 +6,6 @@ CREATE TABLE public.admins(
 );
 
 ALTER TABLE public.users
-    ADD COLUMN admin_id UUID NOT NULL,
+    ADD COLUMN admin_id UUID,
     ADD CONSTRAINT fk_admin_users FOREIGN KEY(admin_id)
         REFERENCES public.admins(admin_id);

@@ -1,8 +1,8 @@
 package com.regpet.api.controllers;
 
 import com.regpet.api.dto.auth.TokenDTO;
-import com.regpet.api.dto.exceptions.MissingFieldsMessageDTO;
 import com.regpet.api.dto.exceptions.ErrorDTO;
+import com.regpet.api.dto.exceptions.MissingFieldsMessageDTO;
 import com.regpet.api.dto.requests.CreateUserRequestDTO;
 import com.regpet.api.dto.requests.UserLoginDTO;
 import com.regpet.api.dto.user.UserCreateResponseDTO;
@@ -11,7 +11,6 @@ import com.regpet.api.exceptions.WrongFieldException;
 import com.regpet.api.services.JWTService;
 import com.regpet.api.services.UserService;
 import com.regpet.api.utils.RequestUtils;
-import io.quarkus.elytron.security.common.BcryptUtil;
 import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
 import org.eclipse.microprofile.openapi.annotations.info.Info;
 

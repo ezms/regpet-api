@@ -1,6 +1,6 @@
 package com.regpet.api.models;
 
-import com.regpet.api.interfaces.IEntityDefaults;
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +11,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "employees", schema = "public")
-public class Employee implements IEntityDefaults<UUID> {
+public class Employee implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "employee_id")

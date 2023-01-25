@@ -1,7 +1,7 @@
 package com.regpet.api.repositories;
 
 import com.regpet.api.exceptions.NotFoundException;
-import com.regpet.api.interfaces.IEntityDefaults;
+import com.regpet.api.interfaces.IEntityDefault;
 import com.regpet.api.interfaces.ICrudMethods;
 
 import javax.inject.Inject;
@@ -13,7 +13,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Transactional
-public abstract class BaseRepository<E extends IEntityDefaults<T>, T> implements ICrudMethods<E> {
+public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements ICrudMethods<E> {
 
     @Inject
     EntityManager entityManager;

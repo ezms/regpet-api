@@ -9,7 +9,6 @@ CREATE TABLE public.addresses(
 );
 
 CREATE TABLE public.users_addresses(
-    users_addresses_id UUID PRIMARY KEY,
     user_id UUID NOT NULL,
     address_id UUID NOT NULL,
     CONSTRAINT fk_users_users_addresses FOREIGN KEY(user_id)

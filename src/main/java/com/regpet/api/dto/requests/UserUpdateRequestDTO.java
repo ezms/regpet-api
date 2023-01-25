@@ -26,5 +26,5 @@ public class UserUpdateRequestDTO {
     private String phoneNumber;
 
     private String bio;
-    private String profilePhoto;
+    private byte[] profilePhoto;
 }

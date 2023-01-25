@@ -1,11 +1,14 @@
 package com.regpet.api.models;
 
-import com.regpet.api.interfaces.IEntityDefaults;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.regpet.api.interfaces.IEntityDefault;
 import io.quarkus.security.jpa.Password;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +16,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "users", schema = "public")
-public class User implements IEntityDefaults<UUID> {
+public class User implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "user_id")
@@ -40,7 +43,7 @@ public class User implements IEntityDefaults<UUID> {
     private String phoneNumber;
 
     @Column(name = "profile_photo")
-    private String profilePhoto;
+    private byte[] profilePhoto;
 
     @Column(name = "is_active")
     private Boolean isActive;
@@ -64,6 +67,6 @@ public class User implements IEntityDefaults<UUID> {
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Ngo> ngoList;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
     private List<Address> addresses;
 }

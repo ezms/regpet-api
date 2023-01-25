@@ -1,10 +1,10 @@
 package com.regpet.api.services;
 
 import com.regpet.api.dto.requests.CreateUserRequestDTO;
+import com.regpet.api.dto.requests.UserUpdateRequestDTO;
 import com.regpet.api.dto.user.UserCreateResponseDTO;
 import com.regpet.api.dto.user.UserRequiredFieldsDTO;
 import com.regpet.api.dto.user.UserResponseDTO;
-import com.regpet.api.dto.requests.UserUpdateRequestDTO;
 import com.regpet.api.dto.user.UserUpdateResponseDTO;
 import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.exceptions.WrongFieldException;

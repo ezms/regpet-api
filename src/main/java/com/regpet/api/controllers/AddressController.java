@@ -1,11 +1,13 @@
 package com.regpet.api.controllers;
 
+import com.regpet.api.dto.address.UserAddressesDTO;
 import com.regpet.api.dto.exceptions.ErrorDTO;
 import com.regpet.api.dto.exceptions.InvalidFieldDTO;
 import com.regpet.api.dto.exceptions.MissingFieldsMessageDTO;
 import com.regpet.api.dto.requests.AddressRequestDTO;
 import com.regpet.api.exceptions.MissingFieldException;
 import com.regpet.api.exceptions.NotFoundException;
+import com.regpet.api.models.Address;
 import com.regpet.api.services.AddressService;
 import com.regpet.api.utils.RequestUtils;
 
@@ -14,7 +16,6 @@ import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,8 +35,8 @@ public class AddressController {
         try {
             RequestUtils.validateRequestBody(request, validator);
             if (userId != null) {
-                return Response.status(Response.Status.CREATED).entity(
-                        addressService.save(userId, request)).build();
+                Address address = addressService.saveWithUser(userId, request);
+                return Response.status(Response.Status.CREATED).entity(address).build();
             }
             return Response.status(Response.Status.CREATED).entity(addressService.save(request)).build();
         } catch (MissingFieldException e) {
@@ -43,6 +44,49 @@ public class AddressController {
                     new MissingFieldsMessageDTO(e.getMessage(), (List<InvalidFieldDTO>) (e.getErrors()))).build();
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO(e.getError())).build();
+        }
+    }
+
+    @GET
+    @Path("/{id}")
+    public Response retrieveAddress(@PathParam("id") UUID id) {
+        try {
+            return Response.status(Response.Status.OK).entity(
+                    addressService.findById(id)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO(e.getError())).build();
+        }
+    }
+
+    @GET
+    public Response retrieveUserAddresses(@QueryParam("userId") UUID userId) {
+        try {
+            return Response.status(Response.Status.OK).entity(new UserAddressesDTO(
+                    addressService.findByUser(userId))).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO(e.getError())).build();
+        }
+    }
+
+    @PUT
+    @Path("/{id}")
+    public Response updateAddressData(@PathParam("id") UUID id, Address address) {
+        try {
+            return Response.status(Response.Status.OK).entity(
+                    addressService.update(id, address)).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getError()).build();
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    public Response removeAddress(@PathParam("id") UUID id, Address address) {
+        try {
+            addressService.delete(id);
+            return Response.status(Response.Status.NO_CONTENT).build();
+        } catch (NotFoundException e) {
+            return Response.status(Response.Status.NOT_FOUND).entity(e.getError()).build();
         }
     }
 }
