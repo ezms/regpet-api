@@ -5,8 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Status {
-    ADOPTED("Adopted"), REDEEMED("Redeemed"), ABANDONED("Abandoned");
-
+public enum WorkStatus {
+    ACTIVE("Active"), INACTIVE("Inactive");
     private final String description;
 }

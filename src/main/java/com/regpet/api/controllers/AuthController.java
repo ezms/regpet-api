@@ -1,5 +1,6 @@
 package com.regpet.api.controllers;
 
+import com.regpet.api.core.BaseController;
 import com.regpet.api.dto.auth.TokenDTO;
 import com.regpet.api.dto.exceptions.ErrorDTO;
 import com.regpet.api.dto.exceptions.MissingFieldsMessageDTO;
@@ -16,30 +17,21 @@ import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import javax.annotation.security.PermitAll;
 import javax.inject.Inject;
-import javax.validation.Validator;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 
 @Path("")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
 @OpenAPIDefinition(info = @Info(description = "Endpoints for working with user authentication",
         title = "Authentications", version = "0.0.1"))
-public class AuthController {
+public class AuthController extends BaseController {
 
     @Inject
     JWTService jwtService;
 
     @Inject
     UserService userService;
-
-    @Inject
-    Validator validator;
 
     @POST
     @PermitAll

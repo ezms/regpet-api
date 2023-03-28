@@ -1,8 +1,8 @@
 package com.regpet.api.repositories;
 
 import com.regpet.api.exceptions.NotFoundException;
-import com.regpet.api.interfaces.IEntityDefault;
 import com.regpet.api.interfaces.ICrudMethods;
+import com.regpet.api.interfaces.IEntityDefault;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -19,6 +19,9 @@ public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements 
     EntityManager entityManager;
 
     public abstract Class<E> getEntityClass();
+
+    public static final Integer DEFAULT_MAX_RESULTS = 20;
+    public static final Integer DEFAULT_OFFSET_RESULTS = 0;
 
     @Override
     public E add(E object) {
@@ -73,5 +76,13 @@ public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements 
         } finally {
             entityManager.flush();
         }
+    }
+
+    public List<E> paginate(Integer limiter, Integer offset) {
+        Query query = entityManager.createQuery("FROM " + getEntityClass().getName());
+        query.setMaxResults(limiter != null ? limiter : DEFAULT_MAX_RESULTS);
+        query.setFirstResult(offset != null ? offset : DEFAULT_OFFSET_RESULTS);
+        List<E> objectList = query.getResultList();
+        return (Objects.nonNull(objectList) && !objectList.isEmpty()) ? objectList : null;
     }
 }

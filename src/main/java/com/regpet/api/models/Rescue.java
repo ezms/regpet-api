@@ -1,10 +1,13 @@
 package com.regpet.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +15,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "rescues", schema = "public")
-public class Rescue {
+public class Rescue implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "rescue_id")
@@ -25,10 +28,15 @@ public class Rescue {
     @Column(name = "story")
     private String story;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(mappedBy = "rescues", fetch = FetchType.LAZY)
-    private List<Animal> animals;
+    @ManyToMany(mappedBy = "rescues", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Address> address;
+
+    @JsonIgnore
+    @ManyToMany(mappedBy = "rescues", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    private List<Animal> animals = new ArrayList<>();
 }

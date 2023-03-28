@@ -5,6 +5,7 @@ CREATE TABLE public.animals_images(
     size BIGINT NOT NULL,
     mime VARCHAR(20) NOT NULL,
     image BYTEA NOT NULL,
+    key VARCHAR NOT NULL,
     image_url VARCHAR,
     animal_id UUID NOT NULL,
     CONSTRAINT fk_animals_animals_images FOREIGN KEY(animal_id)

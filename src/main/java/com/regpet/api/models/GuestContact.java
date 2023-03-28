@@ -1,5 +1,7 @@
 package com.regpet.api.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -10,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "guest_contacts", schema = "public")
-public class GuestContact {
+public class GuestContact implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "guest_contact_id")
@@ -29,6 +31,7 @@ public class GuestContact {
     @Column(name = "cellphone_number", nullable = false, length = 20)
     private String cellphoneNumber;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guest_id")
     private Guest guest;

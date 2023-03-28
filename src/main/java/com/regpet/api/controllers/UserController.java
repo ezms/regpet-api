@@ -1,5 +1,6 @@
 package com.regpet.api.controllers;
 
+import com.regpet.api.core.BaseController;
 import com.regpet.api.dto.exceptions.ErrorDTO;
 import com.regpet.api.dto.exceptions.InvalidFieldDTO;
 import com.regpet.api.dto.exceptions.MissingFieldsMessageDTO;
@@ -11,23 +12,16 @@ import com.regpet.api.services.UserService;
 import com.regpet.api.utils.RequestUtils;
 
 import javax.inject.Inject;
-import javax.validation.Validator;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
 @Path("/users")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class UserController {
+public class UserController extends BaseController {
 
     @Inject
     UserService userService;
-
-    @Inject
-    Validator validator;
 
     @GET
     @Path("/{id}")

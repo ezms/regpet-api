@@ -1,5 +1,6 @@
 package com.regpet.api.controllers;
 
+import com.regpet.api.core.BaseController;
 import com.regpet.api.dto.address.UserAddressesDTO;
 import com.regpet.api.dto.exceptions.ErrorDTO;
 import com.regpet.api.dto.exceptions.InvalidFieldDTO;
@@ -10,25 +11,22 @@ import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.models.Address;
 import com.regpet.api.services.AddressService;
 import com.regpet.api.utils.RequestUtils;
+import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
+import org.eclipse.microprofile.openapi.annotations.info.Info;
 
 import javax.inject.Inject;
-import javax.validation.Validator;
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.UUID;
 
 @Path("/addresses")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class AddressController {
+@OpenAPIDefinition(info = @Info(description = "Endpoints for working with address locations",
+        title = "Address", version = "0.0.1"))
+public class AddressController extends BaseController {
 
     @Inject
     AddressService addressService;
-
-    @Inject
-    Validator validator;
 
     @POST
     public Response setAddress(@QueryParam("userId") UUID userId, AddressRequestDTO request) {
@@ -92,5 +90,11 @@ public class AddressController {
         } catch (NotFoundException e) {
             return Response.status(Response.Status.NOT_FOUND).entity(e.getError()).build();
         }
+    }
+
+    @GET
+    @Path("/filter")
+    public Response getPartialAddresses(@QueryParam("zipCode") String zipCode) {
+        return Response.status(Response.Status.OK).entity(addressService.findByZipCode(zipCode)).build();
     }
 }

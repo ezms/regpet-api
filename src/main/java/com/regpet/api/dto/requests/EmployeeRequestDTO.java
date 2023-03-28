@@ -1,5 +1,6 @@
-package com.regpet.api.dto;
+package com.regpet.api.dto.requests;
 
+import com.regpet.api.enums.WorkStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,7 @@ public class EmployeeRequestDTO {
 
     @NotBlank(message = "Missing 'name' field.")
     private String name;
+
+    @NotBlank(message = "Missing 'status' field.")
+    private WorkStatus status;
 }

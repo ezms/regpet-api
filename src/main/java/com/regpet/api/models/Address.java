@@ -44,6 +44,19 @@ public class Address implements IEntityDefault<UUID> {
     @Column(name = "complement", length = 100)
     private String complement;
 
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "addresses_rescues"
+            , joinColumns = @JoinColumn(name = "address_id")
+            , inverseJoinColumns = @JoinColumn(name = "rescue_id")
+    )
+    private List<Rescue> rescues;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "address", fetch = FetchType.LAZY)
+    private List<Denunciation> denunciation;
+
     @JsonBackReference
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "users_addresses"
@@ -51,14 +64,6 @@ public class Address implements IEntityDefault<UUID> {
             , inverseJoinColumns = @JoinColumn(name = "user_id")
     )
     private List<User> users = new ArrayList<>();
-
-    @JsonIgnore
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "addresses_rescues"
-            , joinColumns = @JoinColumn(name = "address_id")
-            , inverseJoinColumns = @JoinColumn(name = "rescue_id")
-    )
-    private List<Rescue> rescues;
 
     public void addUser(User user) {
         if (user != null) {

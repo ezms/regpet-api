@@ -1,5 +1,6 @@
 package com.regpet.api.services;
 
+import com.regpet.api.dto.address.UncompletedAddressResponseDTO;
 import com.regpet.api.dto.requests.AddressRequestDTO;
 import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.models.Address;
@@ -9,6 +10,8 @@ import com.regpet.api.repositories.UserRepository;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
+import javax.persistence.Tuple;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -81,6 +84,17 @@ public class AddressService {
             throw new NotFoundException("Address not found.");
         }
         addressRepository.delete(foundAddress.getId());
+    }
+
+    public List<UncompletedAddressResponseDTO> findByZipCode(String zipCode) {
+        List<Tuple> tupleList = addressRepository.getByZipCode(zipCode);
+        List<UncompletedAddressResponseDTO> response = new ArrayList<>();
+        for (Tuple address : tupleList) {
+            response.add(new UncompletedAddressResponseDTO(
+                    address.get("zipCode").toString(), address.get("state").toString(), address.get("city").toString(),
+                    address.get("district").toString(), address.get("publicPlace").toString()));
+        }
+        return response;
     }
 
     private Address buildAddress(AddressRequestDTO request) {

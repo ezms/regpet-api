@@ -9,6 +9,6 @@ import java.util.List;
 @AllArgsConstructor
 public class MissingFieldsMessageDTO {
     private String error;
-    private List<InvalidFieldDTO> invalidFieldDTOS;
+    private List<InvalidFieldDTO> invalidFields;
 }
 

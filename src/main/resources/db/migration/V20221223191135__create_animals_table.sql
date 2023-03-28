@@ -3,7 +3,7 @@ CREATE TABLE public.animals(
     species VARCHAR(100) NOT NULL,
     breed VARCHAR(100) NOT NULL,
     name VARCHAR(150),
-    found_on DATE NOT NULL,
+    found_on TIMESTAMP NOT NULL,
     gender SMALLINT NOT NULL,
     description TEXT,
     status SMALLINT NOT NULL

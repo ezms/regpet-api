@@ -37,14 +37,10 @@ public class UserService {
         user.setPassword(BcryptUtil.bcryptHash(requestData.getPassword()));
         user.setIsActive(false);
 
-        userRepository.add(user);
+        user = userRepository.add(user);
 
-        return new UserCreateResponseDTO(
-                user.getId(),
-                user.getName(),
-                user.getUsername(),
-                user.getEmail(),
-                user.getPhoneNumber());
+        return new UserCreateResponseDTO(user.getId(), user.getName(), user.getUsername(),
+                user.getEmail(), user.getPhoneNumber());
     }
 
     public UserResponseDTO findById(UUID id) throws NotFoundException {

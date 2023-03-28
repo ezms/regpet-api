@@ -7,11 +7,12 @@ public class TextUtils {
 
         for (String namePart : splitedName) {
             if (namePart.length() > 2) {
-                stringBuilder.append(namePart.substring(0, 1).toUpperCase()).append(namePart.substring(1).toLowerCase());
-                stringBuilder.append(" ");
+                stringBuilder
+                        .append(namePart.substring(0, 1).toUpperCase())
+                        .append(namePart.substring(1).toLowerCase())
+                        .append(" ");
             } else {
-                stringBuilder.append(namePart.toLowerCase());
-                stringBuilder.append(" ");
+                stringBuilder.append(namePart.toLowerCase()).append(" ");
             }
         }
 

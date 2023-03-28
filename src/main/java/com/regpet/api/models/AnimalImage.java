@@ -1,5 +1,6 @@
 package com.regpet.api.models;
 
+import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,7 @@ import java.util.UUID;
 @Setter
 @Entity
 @Table(name = "animals_images", schema = "public")
-public class AnimalImage {
+public class AnimalImage implements IEntityDefault<UUID> {
 
     @Id
     @Column(name = "animal_image_id")
@@ -29,6 +30,9 @@ public class AnimalImage {
 
     @Column(name = "mime", nullable = false, length = 20)
     private String mime;
+
+    @Column(name = "key", nullable = false)
+    private String key;
 
     @Column(name = "image", nullable = false)
     private String image;

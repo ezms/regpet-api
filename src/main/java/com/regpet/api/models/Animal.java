@@ -1,13 +1,16 @@
 package com.regpet.api.models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.regpet.api.enums.Gender;
-import com.regpet.api.enums.Status;
+import com.regpet.api.enums.AnimalStatus;
 import com.regpet.api.interfaces.IEntityDefault;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,24 +46,51 @@ public class Animal implements IEntityDefault<UUID> {
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status", nullable = false)
-    private Status status;
+    private AnimalStatus animalStatus;
 
-    @OneToMany(mappedBy = "animal")
+    @JsonIgnore
+    @OneToMany(mappedBy = "animal", fetch = FetchType.LAZY)
     private List<AnimalImage> image;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "animals_rescues",
             joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "rescue_id")
     )
-    private List<Rescue> rescues;
+    private List<Rescue> rescues = new ArrayList<>();
 
+    @JsonIgnore
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "animals_denunciations",
             joinColumns = @JoinColumn(name = "animal_id"),
             inverseJoinColumns = @JoinColumn(name = "denunciation_id")
     )
-    private List<Denunciation> denunciations;
+    private List<Denunciation> denunciations = new ArrayList<>();
+
+    public void addRescue(Rescue rescue) {
+        if (rescue != null) {
+            if (!getRescues().contains(rescue)) {
+                getRescues().add(rescue);
+            }
+
+            if (!rescue.getAnimals().contains(this)) {
+                rescue.getAnimals().add(this);
+            }
+        }
+    }
+
+    public void addDenunciation(Denunciation denunciation) {
+        if (denunciation != null) {
+            if (!getDenunciations().contains(denunciation)) {
+                getDenunciations().add(denunciation);
+            }
+
+            if (!denunciation.getAnimals().contains(this)) {
+                denunciation.getAnimals().add(this);
+            }
+        }
+    }
 }
