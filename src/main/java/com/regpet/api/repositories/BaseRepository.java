@@ -12,7 +12,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
-@Transactional
 public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements ICrudMethods<E> {
 
     @Inject
@@ -24,6 +23,7 @@ public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements 
     public static final Integer DEFAULT_OFFSET_RESULTS = 0;
 
     @Override
+    @Transactional
     public E add(E object) {
         entityManager.persist(object);
         entityManager.flush();
@@ -46,6 +46,7 @@ public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements 
     }
 
     @Override
+    @Transactional
     public E update(UUID id, E object) {
         try {
             E foundEntity = getById(id);
@@ -63,6 +64,7 @@ public abstract class BaseRepository<E extends IEntityDefault<T>, T> implements 
     }
 
     @Override
+    @Transactional
     public void delete(UUID id) {
         try {
             E foundEntity = getById(id);

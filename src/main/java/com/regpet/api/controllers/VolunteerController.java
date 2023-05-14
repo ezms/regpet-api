@@ -11,6 +11,8 @@ import com.regpet.api.services.VolunteerService;
 import com.regpet.api.services.NgoService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -27,6 +29,7 @@ public class VolunteerController extends BaseController {
     NgoService ngoService;
 
     @POST
+    @PermitAll
     public Response registerVolunteer(@QueryParam("ngo") UUID ngoId, VolunteerRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -41,6 +44,7 @@ public class VolunteerController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "ngo", "guest"})
     public Response getAll(@QueryParam("ngo") UUID ngoId) {
         try {
             return Response.status(Response.Status.OK).entity(volunteerService.retrieveVolunteers(ngoId)).build();
@@ -51,6 +55,7 @@ public class VolunteerController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getById(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(volunteerService.getById(id)).build();
@@ -61,6 +66,7 @@ public class VolunteerController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response update(@PathParam("id") UUID id, VolunteerRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -75,6 +81,7 @@ public class VolunteerController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response delete(@PathParam("id") UUID id) {
         try {
             volunteerService.delete(id);

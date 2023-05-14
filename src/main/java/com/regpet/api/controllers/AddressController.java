@@ -11,9 +11,8 @@ import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.models.Address;
 import com.regpet.api.services.AddressService;
 import com.regpet.api.utils.RequestUtils;
-import org.eclipse.microprofile.openapi.annotations.OpenAPIDefinition;
-import org.eclipse.microprofile.openapi.annotations.info.Info;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -21,14 +20,13 @@ import java.util.List;
 import java.util.UUID;
 
 @Path("/addresses")
-@OpenAPIDefinition(info = @Info(description = "Endpoints for working with address locations",
-        title = "Address", version = "0.0.1"))
 public class AddressController extends BaseController {
 
     @Inject
     AddressService addressService;
 
     @POST
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response setAddress(@QueryParam("userId") UUID userId, AddressRequestDTO request) {
         try {
             RequestUtils.validateRequestBody(request, validator);
@@ -47,6 +45,7 @@ public class AddressController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response retrieveAddress(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(
@@ -57,6 +56,7 @@ public class AddressController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response retrieveUserAddresses(@QueryParam("userId") UUID userId) {
         try {
             return Response.status(Response.Status.OK).entity(new UserAddressesDTO(
@@ -68,6 +68,7 @@ public class AddressController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response updateAddressData(@PathParam("id") UUID id, Address address) {
         try {
             RequestUtils.validateRequestBody(address, validator);
@@ -83,6 +84,7 @@ public class AddressController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response removeAddress(@PathParam("id") UUID id, Address address) {
         try {
             addressService.delete(id);
@@ -94,6 +96,7 @@ public class AddressController extends BaseController {
 
     @GET
     @Path("/filter")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response getPartialAddresses(@QueryParam("zipCode") String zipCode) {
         return Response.status(Response.Status.OK).entity(addressService.findByZipCode(zipCode)).build();
     }

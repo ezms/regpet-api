@@ -12,6 +12,8 @@ import com.regpet.api.exceptions.WrongFieldException;
 import com.regpet.api.services.NgoService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
@@ -26,6 +28,7 @@ public class NgoController extends BaseController {
     NgoService ngoService;
 
     @POST
+    @PermitAll
     public Response registerNGO(@NotNull @QueryParam("userId") UUID userId, CreateNGORequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -41,6 +44,7 @@ public class NgoController extends BaseController {
     }
 
     @GET
+    @RolesAllowed("admin")
     public Response getAllNGO() {
         try {
             return Response.status(Response.Status.OK).entity(ngoService.findAll()).build();
@@ -50,6 +54,7 @@ public class NgoController extends BaseController {
     }
 
     @GET
+    @PermitAll
     @Path("/{id}")
     public Response getNgoById(@PathParam("id") UUID id) {
         try {
@@ -61,6 +66,7 @@ public class NgoController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response a(@PathParam("id") UUID id, NgoUpdateRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -75,6 +81,7 @@ public class NgoController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response a(@PathParam("id") UUID id) {
         try {
             ngoService.delete(id);

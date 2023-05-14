@@ -51,9 +51,10 @@ public class AuthController extends BaseController {
     }
 
     @POST
+    @PermitAll
     @Path("/login")
     public Response authenticate(UserLoginDTO request) {
-        String jwt = jwtService.generateJWT(request.getEmail(), request.getPassword());
+        String jwt = jwtService.generateJWT(request.getEmail(), request.getPassword(), request.getRoles());
         return Response.status(Response.Status.OK).entity(new TokenDTO(jwt)).build();
     }
 }

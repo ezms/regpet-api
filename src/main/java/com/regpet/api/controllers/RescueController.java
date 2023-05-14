@@ -11,6 +11,8 @@ import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.services.RescueService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -25,6 +27,7 @@ public class RescueController extends BaseController {
     RescueService rescueService;
 
     @POST
+    @PermitAll
     public Response makeRescue(@QueryParam("userId") UUID userId, CreateRescueRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -39,6 +42,7 @@ public class RescueController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getRescue(@PathParam("id") UUID rescueId) {
         try {
             return Response.status(Response.Status.OK).entity(rescueService.findById(rescueId)).build();
@@ -48,6 +52,7 @@ public class RescueController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getRescues(@QueryParam("limit") Integer limiter, @QueryParam("offset") Integer offset) {
         try {
             return Response.status(Response.Status.OK).entity(rescueService.findAll(limiter, offset)).build();
@@ -58,6 +63,7 @@ public class RescueController extends BaseController {
 
     @GET
     @Path("/user/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getRescuesByUser(@PathParam("id") UUID userId,
                                      @QueryParam("limit") Integer limiter,
                                      @QueryParam("offset") Integer offset) {
@@ -70,6 +76,7 @@ public class RescueController extends BaseController {
 
     @GET
     @Path("/filter/user/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getRescuesByTimeInterval(@PathParam("id") UUID userId,
                                      @QueryParam("start") LocalDateTime startDate,
                                      @QueryParam("finish") LocalDateTime finishDate,
@@ -85,6 +92,8 @@ public class RescueController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    // TODO:Criar validação para não ser alterada
+    @RolesAllowed({"admin", "ngo", "animalProtector"})
     public Response getRescue(@PathParam("id") UUID rescueId, UpdateRescueRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);

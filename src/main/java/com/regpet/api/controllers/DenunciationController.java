@@ -11,6 +11,8 @@ import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.services.DenunciationService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -25,6 +27,7 @@ public class DenunciationController extends BaseController {
     DenunciationService denunciationService;
 
     @POST
+    @PermitAll
     public Response makeDenunciation(@QueryParam("userId") UUID userId, CreateDenunciationRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -40,6 +43,7 @@ public class DenunciationController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getDenunciation(@PathParam("id") UUID denunciationsId) {
         try {
             return Response.status(Response.Status.OK).entity(denunciationService.findById(denunciationsId)).build();
@@ -49,6 +53,7 @@ public class DenunciationController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getDenunciations(@QueryParam("limit") Integer limiter, @QueryParam("offset") Integer offset) {
         try {
             return Response.status(Response.Status.OK).entity(denunciationService.findAll(limiter, offset)).build();
@@ -59,6 +64,7 @@ public class DenunciationController extends BaseController {
 
     @GET
     @Path("/user/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getDenunciationByUser(@PathParam("id") UUID userId,
                                      @QueryParam("limit") Integer limiter,
                                      @QueryParam("offset") Integer offset) {
@@ -71,6 +77,7 @@ public class DenunciationController extends BaseController {
 
     @GET
     @Path("/filter/user/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getDenunciationByUser(@PathParam("id") UUID userId,
                                      @QueryParam("start") LocalDateTime startDate,
                                      @QueryParam("finish") LocalDateTime finishDate,
@@ -85,7 +92,9 @@ public class DenunciationController extends BaseController {
     }
 
     @PATCH
+    // TODO:Criar validação para não ser alterada
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "animalProtector"})
     public Response getDenunciation(@PathParam("id") UUID denunciationsId, UpdateDenunciationRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);

@@ -6,6 +6,7 @@ import com.regpet.api.dto.files.FormDataDTO;
 import com.regpet.api.services.AnimalImageService;
 import org.jboss.resteasy.reactive.MultipartForm;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -19,6 +20,7 @@ public class AnimalImageController extends BaseController {
     AnimalImageService animalImageService;
 
     @POST
+    @RolesAllowed({"user", "guest", "ngo", "animalProtector", "admin"})
     public Response uploadAnimalImage(@MultipartForm FormDataDTO data) {
         try {
             return Response.status(Response.Status.OK).entity(

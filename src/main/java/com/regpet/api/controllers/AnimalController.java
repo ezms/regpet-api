@@ -11,8 +11,8 @@ import com.regpet.api.exceptions.NotFoundException;
 import com.regpet.api.services.AnimalService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.validation.Validator;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
 import java.util.List;
@@ -24,10 +24,8 @@ public class AnimalController extends BaseController {
     @Inject
     AnimalService animalService;
 
-    @Inject
-    Validator validator;
-
     @POST
+    @RolesAllowed({"admin", "user", "guest"})
     public Response saveAnimal(CreateAnimalRequestDTO request) {
         try {
             RequestUtils.validateRequestBody(request, validator);
@@ -39,6 +37,7 @@ public class AnimalController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response retrieveAllAnimals(@QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset) {
         try {
             return Response.status(Response.Status.OK).entity(animalService.getAll(
@@ -50,6 +49,7 @@ public class AnimalController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response retrieveAnAnimal(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(
@@ -61,6 +61,7 @@ public class AnimalController extends BaseController {
 
     @GET
     @Path("/filter")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response retrieveAllAnimalsByName(@QueryParam("name") String name) {
         try {
             return Response.status(Response.Status.OK).entity(
@@ -72,6 +73,7 @@ public class AnimalController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "user", "ngo", "animalProtector", "guest"})
     public Response updateAnimalData(@PathParam("id") UUID id, UpdateAnimalRequestDTO request) {
         try {
             RequestUtils.validateRequestBody(request, validator);

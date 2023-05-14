@@ -12,6 +12,8 @@ import com.regpet.api.services.GuestContactService;
 import com.regpet.api.services.GuestService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -28,6 +30,7 @@ public class GuestController extends BaseController {
     GuestContactService contactService;
 
     @POST
+    @PermitAll
     public Response register(@QueryParam("userId") UUID userId) {
         try {
             return Response.status(Response.Status.OK).entity(guestService.add(userId)).build();
@@ -39,6 +42,7 @@ public class GuestController extends BaseController {
     }
 
     @GET
+    @PermitAll
     @Path("/{id}")
     public Response getById(@PathParam("id") UUID id) {
         try {
@@ -50,6 +54,7 @@ public class GuestController extends BaseController {
 
     @PUT
     @Path("/{id}/contacts")
+    @RolesAllowed({"admin", "guest"})
     public Response saveContacts(@PathParam("id") UUID id, GuestContactRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -64,6 +69,7 @@ public class GuestController extends BaseController {
 
     @GET
     @Path("/{id}/contacts")
+    @RolesAllowed({"admin", "guest"})
     public Response getContacts(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(contactService.findByGuest(id)).build();

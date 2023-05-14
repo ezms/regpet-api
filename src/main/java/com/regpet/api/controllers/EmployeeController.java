@@ -11,6 +11,8 @@ import com.regpet.api.services.EmployeeService;
 import com.regpet.api.services.NgoService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.PermitAll;
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
@@ -30,6 +32,7 @@ public class EmployeeController extends BaseController {
     NgoService ngoService;
 
     @POST
+    @RolesAllowed({"admin", "ngo"})
     public Response registerEmployee(@QueryParam("ngo") UUID ngoId, EmployeeRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -44,6 +47,7 @@ public class EmployeeController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "ngo"})
     public Response getAll(@QueryParam("ngo") UUID ngoId) {
         try {
             return Response.status(Response.Status.OK).entity(employeeService.retrieveEmployees(ngoId)).build();
@@ -53,6 +57,7 @@ public class EmployeeController extends BaseController {
     }
 
     @GET
+    @PermitAll
     @Path("/{id}")
     public Response getById(@PathParam("id") UUID id) {
         try {
@@ -64,6 +69,7 @@ public class EmployeeController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response update(@PathParam("id") UUID id, EmployeeRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -78,6 +84,7 @@ public class EmployeeController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response delete(@PathParam("id") UUID id) {
         try {
             employeeService.delete(id);
@@ -86,4 +93,6 @@ public class EmployeeController extends BaseController {
             return Response.status(Response.Status.NOT_FOUND).entity(new ErrorDTO(e.getError())).build();
         }
     }
+
+    // TODO: Cadê o método de buscar pela ONG?
 }

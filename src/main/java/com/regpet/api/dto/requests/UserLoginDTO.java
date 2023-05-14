@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 @Getter
 @Setter
@@ -18,4 +19,7 @@ public class UserLoginDTO {
 
     @NotBlank(message = "Missing 'password' field.")
     private String password;
+
+    @NotBlank(message = "Missing 'roles' field.")
+    private List<String> roles;
 }

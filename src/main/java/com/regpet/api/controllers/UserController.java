@@ -11,6 +11,7 @@ import com.regpet.api.exceptions.WrongFieldException;
 import com.regpet.api.services.UserService;
 import com.regpet.api.utils.RequestUtils;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -25,6 +26,7 @@ public class UserController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getById(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(userService.findById(id)).build();
@@ -35,6 +37,7 @@ public class UserController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response update(@PathParam("id") UUID id, UserUpdateRequestDTO request) {
         try {
             RequestUtils.validateRequestBody(request, validator);
@@ -51,6 +54,7 @@ public class UserController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("admin")
     public Response delete(@PathParam("id") UUID id) {
         try {
             userService.delete(id);

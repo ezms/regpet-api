@@ -11,6 +11,7 @@ import com.regpet.api.services.AnimalProtectorService;
 import com.regpet.api.utils.RequestUtils;
 import lombok.NonNull;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Response;
@@ -24,6 +25,7 @@ public class AnimalProtectorController extends BaseController {
     AnimalProtectorService animalProtectorService;
 
     @POST
+    @RolesAllowed({"users", "guest", "admin"})
     public Response registerAnimalProtector(@NonNull @QueryParam("userId") UUID userId,
                                             AnimalProtectorRequestDTO requestDTO) {
         try {
@@ -39,6 +41,7 @@ public class AnimalProtectorController extends BaseController {
     }
 
     @GET
+    @RolesAllowed({"admin", "ngo", "guest", "animalProtector"})
     public Response getAllNGO() {
         try {
             return Response.status(Response.Status.OK).entity(animalProtectorService.findAll()).build();
@@ -49,6 +52,7 @@ public class AnimalProtectorController extends BaseController {
 
     @GET
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo", "guest"})
     public Response getNgoById(@PathParam("id") UUID id) {
         try {
             return Response.status(Response.Status.OK).entity(animalProtectorService.findById(id)).build();
@@ -59,6 +63,7 @@ public class AnimalProtectorController extends BaseController {
 
     @PUT
     @Path("/{id}")
+    @RolesAllowed({"admin", "ngo"})
     public Response a(@PathParam("id") UUID id, AnimalProtectorRequestDTO requestDTO) {
         try {
             RequestUtils.validateRequestBody(requestDTO, validator);
@@ -74,6 +79,7 @@ public class AnimalProtectorController extends BaseController {
 
     @DELETE
     @Path("/{id}")
+    @RolesAllowed("admin")
     public Response a(@PathParam("id") UUID id) {
         try {
             animalProtectorService.delete(id);
